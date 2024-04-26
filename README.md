@@ -47,7 +47,7 @@ A simple piano simulator / tool / assistant that can note notes
 
 - **ONLY** for personal learning, **NOT for Commercial Use**!
 
-## 程序名称
+## 简易钢琴助手
 
 ### 简介
 
