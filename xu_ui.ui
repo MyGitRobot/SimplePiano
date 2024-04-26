@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Simple Piano</string>
+  </property>
+  <widget class="QGroupBox" name="boxNotePad">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>10</y>
+     <width>221</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Note Pad</string>
+   </property>
+   <widget class="QTextEdit" name="textNotePad">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>201</width>
+      <height>411</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonSaveNote">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>440</y>
+      <width>81</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="boxWorkSpace">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>551</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Work Space</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+   </property>
+   <widget class="QGroupBox" name="boxInformation">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>531</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Information</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <widget class="QLabel" name="labelScale">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>30</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Scale :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelKeysOrigin">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>70</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Keys origin :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelKeysOnScale">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>110</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Keys on scale :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineKeyOrigin">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>70</y>
+       <width>251</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineKeyOnScale">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>110</y>
+       <width>251</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboRootNote">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>30</y>
+       <width>51</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboScale">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>30</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_scale">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>140</y>
+       <width>451</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Scale :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="boxKeyboard">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>260</y>
+      <width>531</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox:focus {
+	border: 2px dotted #00d4ff;
+	margin: 8px 0 0 0;
+	color: #00d4ff;
+}
+QGroupBox::title {
+	subcontrol-origin: margin;
+	subcontrol-position: top center;
+	padding: 0 3px;
+}</string>
+    </property>
+    <property name="title">
+     <string>Keyboard</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <widget class="QPushButton" name="buttonWhiteKey_1">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #fffddd;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+Z</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_2">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+X</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_3">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+C</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_4">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+V</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_5">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+B</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_6">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+N</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_7">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+M</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_8">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #fffddd;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+
+Q
+,</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_9">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+
+W
+.</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_10">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+
+E
+/</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_11">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+R</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_12">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+T</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_13">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_14">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+U</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_15">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #fffddd;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+I</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_16">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+O</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_17">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+P</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_18">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+[</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonWhiteKey_19">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>90</y>
+       <width>21</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: white;
+    color: black;
+    border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #e2faff;
+}
+QPushButton:pressed {
+	background-color: #97efff;
+}
+QPushButton:focus {
+	border: 1px solid #00c1e4;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>
+]</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_1">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>S</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_2">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>D</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_3">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_4">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_5">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>J</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_6">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>2
+L</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_7">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>3
+;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_8">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_9">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_10">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_11">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>9</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_12">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonBlackKey_13">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>60</y>
+       <width>21</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: black;
+    color: white;
+    border: 1px solid #b0b0b0;
+	padding: 1px;
+}
+QPushButton:hover {
+    background-color: #585858;
+}
+QPushButton:pressed {
+	background-color: #37c0d9;
+}
+QPushButton:focus {
+	border: 1px solid;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>=</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="buttonSwitch">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>230</y>
+      <width>111</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Switch to Scale</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_info">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>10</y>
+      <width>331</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #a0a0a0;</string>
+    </property>
+    <property name="text">
+     <string>[Info]</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
