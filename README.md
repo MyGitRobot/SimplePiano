@@ -21,7 +21,7 @@ A simple piano simulator / tool / assistant that can note notes
 
 ### Method
 
-- Notice: Don't forget to download **soundLib** to local, or you cannot run it successfully.
+- Notice: Don't forget to download **soundLib** to local, or you cannot run it successfully. (Download **soundLib** from `Releases`)
 - **Simple Piano 1.0.0**
   - Work Space
     - State: Show real-time work state
@@ -67,7 +67,7 @@ A simple piano simulator / tool / assistant that can note notes
 
 ### 使用说明
 
-- 注意：缺乏**soundLib**文件夹则无法正常运行
+- 注意：缺乏**soundLib**文件夹则无法正常运行（请从`Releases`下载）
 - **Simple Piano 1.0.0**
   - Work Space
     - State: 显示各种操作状态
