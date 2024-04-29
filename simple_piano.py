@@ -4,10 +4,11 @@
 Program: Simple Piano Assistant
 Author: MrCrawL
 Created Time: 2024-04-23
-Last Modified: 2024-04-26
+Last Modified: 2024-04-28
 PS. 2024-04-24 by MrCrawL: Creat file and realize basic functions
     2024-04-25 by MrCrawL: Add display information function and modify sound system
     2024-04-26 by MrCrawL: Fix file not found bug and optimize code  # todo next step: add more soundLibs
+    2024-04-28 by MrCrawL: Fix bug that mouse click doesn't display information
 """
 
 import sys, os
@@ -15,7 +16,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QGroupBox, QPushButton, QMess
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import QThread, pyqtSignal
 from xu_ui import Ui_Form
-from mr_ico import icon_hex  # todo: comment this line if Exception raised
+from mr_ico import icon_hex  # todo: comment this line if you're not the author, or it will raise Exception
 import pygame
 from pynput.keyboard import Listener
 import logging
@@ -96,14 +97,14 @@ class InfoThread(QThread):
 
 class KeyboardButton:
     """包含各种属性的自定义键盘按钮"""
-    def __init__(self, push_button:QPushButton, note_name:str, state:bool=False):
+    def __init__(self, push_button: QPushButton, note_name: str, state: bool = False):
         self.button = push_button  # 键盘对应的 Qt 按钮
         self.noteName = note_name  # 音名
         self.isPressed = state  # 按键是否被按下
         self.oggFile = os.path.join(soundLibDir, f'{self.noteName}.ogg')  # 音源文件路径
         self.sound = pygame.mixer.Sound(self.oggFile)  # 能发声的 Sound 对象
 
-    def update_attrs(self, note_name:str):
+    def update_attrs(self, note_name: str):
         """更新键盘按钮的属性"""
         self.noteName = note_name
         self.oggFile = os.path.join(soundLibDir, f'{self.noteName}.ogg')
@@ -112,8 +113,8 @@ class KeyboardButton:
     def set_connections(self):
         if self.button.receivers(self.button.pressed) > 0: self.button.pressed.disconnect()
         if self.button.receivers(self.button.released) > 0: self.button.released.disconnect()
-        self.button.pressed.connect(lambda: Window.start_sound(self.sound))
-        self.button.released.connect(lambda: Window.stop_sound(self.sound))
+        self.button.pressed.connect(lambda: ui.mouse_press(self))
+        self.button.released.connect(lambda: ui.mouse_release(self))
 
 
 class Window(QWidget, Ui_Form):
@@ -122,7 +123,7 @@ class Window(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
 
-        # 设置窗口图标 todo: comment 126-129 lines if Exception raised
+        # 设置窗口图标 todo: comment 126-129 lines if you're not the author, or it will raise Exception
         self.pixmap = QPixmap()
         self.pixmap.loadFromData(bytes.fromhex(icon_hex))
         self.icon = QIcon(self.pixmap)
@@ -284,6 +285,19 @@ class Window(QWidget, Ui_Form):
                 self.keyMap[key.char].button.setDown(False)
                 self.stop_sound(self.keyMap[key.char].sound)
 
+    def mouse_press(self, button_key: KeyboardButton):
+        """鼠标点击键盘"""
+        if not button_key.isPressed:
+            self.infoThread.start()
+            button_key.isPressed = True
+            self.start_sound(button_key.sound)
+
+    def mouse_release(self, button_key: KeyboardButton):
+        """鼠标释放键盘"""
+        self.infoThread.start()
+        button_key.isPressed = False
+        self.stop_sound(button_key.sound)
+
     @staticmethod
     def start_sound(note: pygame.mixer.Sound):
         note.set_volume(100)
@@ -308,6 +322,7 @@ class Window(QWidget, Ui_Form):
         QGroupBox.focusOutEvent(self.boxKeyboard, event)
 
     def build_connections(self):
+        """建立鼠标点击的信号连接"""
         for buttonKey in self.buttonKeys:
             buttonKey.set_connections()
 
@@ -343,10 +358,10 @@ class Window(QWidget, Ui_Form):
         for button in buttonBlackKeys:
             button.setGeometry(button.x(), button.y(), button.width() - 1, button.height())
 
-    def msgbox(self, title:str, text:str):
+    def msgbox(self, title: str, text: str):
         """对话框"""
         msgBox = QMessageBox()
-        msgBox.setWindowIcon(self.icon)  # todo: comment this line if Exception raised
+        msgBox.setWindowIcon(self.icon)  # todo: comment this line if you're not the author, or it will raise Exception
         msgBox.setWindowTitle(title)
         msgBox.setText(text)
         msgBox.setIcon(QMessageBox.Icon.Information)
@@ -355,29 +370,26 @@ class Window(QWidget, Ui_Form):
 
 
 # 记录错误日志
-def error_logging(error:Exception):
+def error_logging(error: Exception):
+    """记录错误日志"""
     filename = os.path.join(fileDir, 'error.log')
     logging.basicConfig(filename=filename, format='%(asctime)s - %(levelname)s - %(message)s', level=logging.ERROR,
                         encoding='utf-8')
     logging.error(f"Error o rccurred: {error}", exc_info=True)
 
 
-def main():
-
-    # 初始化 pygame，使用 pygame 发出声音
-    pygame.init()
-    pygame.mixer.init()
-
-    # 初始化 Qt 窗口
-    app = QApplication(sys.argv)
-    ui = Window()
-    ui.show()
-    sys.exit(app.exec())
-
-
 if __name__ == '__main__':
     try:
-        main()
+        # 初始化 pygame，使用 pygame 发出声音
+        pygame.init()
+        pygame.mixer.init()
+
+        # 初始化 Qt 窗口
+        app = QApplication(sys.argv)
+        ui = Window()
+        ui.show()
+        sys.exit(app.exec())
+
     except Exception as e:
         print(f'[Error] {e}')
         error_logging(e)
