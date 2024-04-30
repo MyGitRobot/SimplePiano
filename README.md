@@ -43,7 +43,7 @@ A simple piano simulator / tool / assistant that can note notes
     - Click `Save` button to save the content of Note Pad.
     - Forgot to click `Save` button before quit? Don't worry. It will automatically saved when you exit Simple Piano.
 
-- Download link: https://github.com/MyGitRobot/SimplePiano/releases/download/v1.0.0/SimplePiano.zip
+- Download link: https://github.com/MyGitRobot/SimplePiano/releases
 
 ### Statement
 
@@ -88,7 +88,7 @@ A simple piano simulator / tool / assistant that can note notes
     - 可以在这记录音符、想法和计划等。
     - 点击`Save`按钮保存Note Pad内容。
     - 没点`Save`也没事，关闭Simple Piano时会自动保存。
-- 下载链接：https://github.com/MyGitRobot/SimplePiano/releases/download/v1.0.0/SimplePiano.zip
+- 下载链接：https://github.com/MyGitRobot/SimplePiano/releases
 
 ### 声明
 
