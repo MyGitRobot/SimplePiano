@@ -728,6 +728,13 @@ class Ui_Form(object):
         self.label_info.setStyleSheet("color: #a0a0a0;")
         self.label_info.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_info.setObjectName("label_info")
+        self.comboSound = QtWidgets.QComboBox(parent=self.boxWorkSpace)
+        self.comboSound.setGeometry(QtCore.QRect(80, 230, 131, 24))
+        self.comboSound.setObjectName("comboSound")
+        self.labelSoundLib = QtWidgets.QLabel(parent=self.boxWorkSpace)
+        self.labelSoundLib.setGeometry(QtCore.QRect(10, 230, 63, 21))
+        self.labelSoundLib.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.labelSoundLib.setObjectName("labelSoundLib")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -805,3 +812,4 @@ class Ui_Form(object):
         self.buttonBlackKey_13.setText(_translate("Form", "="))
         self.buttonSwitch.setText(_translate("Form", "Switch to Scale"))
         self.label_info.setText(_translate("Form", "[Info]"))
+        self.labelSoundLib.setText(_translate("Form", "SoundLib :"))
