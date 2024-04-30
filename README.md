@@ -18,6 +18,8 @@ A simple piano simulator / tool / assistant that can note notes
 - **pygame**
 - **pynput**
 - **logging**
+- **threading**
+- **time**
 
 ### Method
 
@@ -64,6 +66,8 @@ A simple piano simulator / tool / assistant that can note notes
 - **pygame**
 - **pynput**
 - **logging**
+- **threading**
+- **time**
 
 ### 使用说明
 
