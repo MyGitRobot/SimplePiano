@@ -1,28 +1,31 @@
 # -*- coding: utf-8 -*-
 
 """
-Program: Simple Piano Assistant
+Program: Simple Piano
 Author: MrCrawL
 Created Time: 2024-04-23
-Last Modified: 2024-04-28
+Last Modified: 2024-04-30
 PS. 2024-04-24 by MrCrawL: Creat file and realize basic functions
     2024-04-25 by MrCrawL: Add display information function and modify sound system
-    2024-04-26 by MrCrawL: Fix file not found bug and optimize code  # todo next step: add more soundLibs
+    2024-04-26 by MrCrawL: Fix file not found bug and optimize code
     2024-04-28 by MrCrawL: Fix bug that mouse click doesn't display information
+    2024-04-30 by MrCrawL: Add more soundLib and improve keyboard release fluency # todo: add update function
 """
 
 import sys, os
+import pygame
+import logging
 from PyQt6.QtWidgets import QApplication, QWidget, QGroupBox, QPushButton, QMessageBox
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import QThread, pyqtSignal
 from xu_ui import Ui_Form
-from mr_ico import icon_hex  # todo: comment this line if you're not the author, or it will raise Exception
-import pygame
+from mr_ico import icon_hex  # fixme: comment this line if you're not the author, or it might raise Exception
 from pynput.keyboard import Listener
-import logging
+from threading import Thread
+from time import sleep
 
 # 版本号
-VERSION = '1.0.0'
+VERSION = '1.1.0'
 
 # 获取文件路径
 filePath = None
@@ -31,7 +34,8 @@ if getattr(sys, 'frozen', False):
 else:
     filePath = os.path.abspath(__file__)
 fileDir = os.path.dirname(filePath)
-soundLibDir = os.path.join(fileDir, r'soundLib\Upright_Piano')
+soundLibDir = os.path.join(fileDir, r'soundLib')
+soundLibPath = os.path.join(soundLibDir, os.listdir(soundLibDir)[0])
 
 # Ord 0-48, pick 32 from 49
 NOTE_LIST = ['C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3',
@@ -101,16 +105,17 @@ class KeyboardButton:
         self.button = push_button  # 键盘对应的 Qt 按钮
         self.noteName = note_name  # 音名
         self.isPressed = state  # 按键是否被按下
-        self.oggFile = os.path.join(soundLibDir, f'{self.noteName}.ogg')  # 音源文件路径
+        self.oggFile = os.path.join(soundLibPath, f'{self.noteName}.ogg')  # 音源文件路径
         self.sound = pygame.mixer.Sound(self.oggFile)  # 能发声的 Sound 对象
 
     def update_attrs(self, note_name: str):
         """更新键盘按钮的属性"""
         self.noteName = note_name
-        self.oggFile = os.path.join(soundLibDir, f'{self.noteName}.ogg')
+        self.oggFile = os.path.join(soundLibPath, f'{self.noteName}.ogg')
         self.sound = pygame.mixer.Sound(self.oggFile)
-    
+
     def set_connections(self):
+        """建立按钮和按下/释放函数的连接"""
         if self.button.receivers(self.button.pressed) > 0: self.button.pressed.disconnect()
         if self.button.receivers(self.button.released) > 0: self.button.released.disconnect()
         self.button.pressed.connect(lambda: ui.mouse_press(self))
@@ -123,13 +128,14 @@ class Window(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
 
-        # 设置窗口图标 todo: comment 126-129 lines if you're not the author, or it will raise Exception
+        # 设置窗口图标 fixme: comment the following 4 lines if you're not the author, or it might raise Exception
         self.pixmap = QPixmap()
         self.pixmap.loadFromData(bytes.fromhex(icon_hex))
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
-        self.setWindowTitle(f'{self.windowTitle() + " " + VERSION}')
 
+        # 设置窗口标题
+        self.setWindowTitle(f'{self.windowTitle() + " " + VERSION}')
         # 设置窗口固定大小
         self.setFixedSize(800, 500)
         # 调整黑键大小
@@ -151,9 +157,13 @@ class Window(QWidget, Ui_Form):
         self.comboScale.currentTextChanged.connect(self.update_info)
         self.pressedNoteOrds = []
 
+        # 音色库
+        self.comboSound.addItems(os.listdir(soundLibDir))
+        self.comboSound.currentTextChanged.connect(self.togglt_sound_combo)
+
         # 初始化键盘和音符
         self.rootOrd = 12
-        try:
+        try:  # 知道这里很冗长，但是不想优化了哈哈哈哈哈哈哈哈哈哈哈略略略
             self.whiteKey_1 = KeyboardButton(self.buttonWhiteKey_1, NOTE_LIST[self.rootOrd])
             self.whiteKey_2 = KeyboardButton(self.buttonWhiteKey_2, NOTE_LIST[self.rootOrd + 2])
             self.whiteKey_3 = KeyboardButton(self.buttonWhiteKey_3, NOTE_LIST[self.rootOrd + 4])
@@ -187,9 +197,9 @@ class Window(QWidget, Ui_Form):
             self.blackKey_12 = KeyboardButton(self.buttonBlackKey_12, NOTE_LIST[self.rootOrd + 27])
             self.blackKey_13 = KeyboardButton(self.buttonBlackKey_13, NOTE_LIST[self.rootOrd + 30])
         except Exception as err:
-            self.msgbox('Notification', 'Sound files not found.\nPlease check your soundLib files.')
+            self.Msgbox('Notification', 'Sound files not found.\nPlease check your soundLib files.')
             error_logging(err)
-            quit()
+            sys.exit()
 
         # 键盘按钮列表
         self.buttonKeys = [self.whiteKey_1, self.blackKey_1, self.whiteKey_2, self.blackKey_2, self.whiteKey_3,
@@ -215,6 +225,7 @@ class Window(QWidget, Ui_Form):
         # 显示音符
         self.keyOriginText = []
         self.keyOnScaleText = []
+
         # 信息线程
         self.infoThread = InfoThread()
         self.infoThread.info.connect(self.setInfoText)
@@ -234,7 +245,24 @@ class Window(QWidget, Ui_Form):
         self.build_connections()
         self.buttonSwitch.clicked.connect(self.switch_keys)
 
+    def Msgbox(self, title: str, text: str):
+        """对话框"""
+        msgBox = QMessageBox()
+        msgBox.setWindowIcon(self.icon)  # fixme: comment this line, or it might raise Exception
+        msgBox.setWindowTitle(title)
+        msgBox.setText(text)
+        msgBox.setIcon(QMessageBox.Icon.Information)
+        msgBox.addButton(QMessageBox.StandardButton.Ok)
+        msgBox.exec()
+
+    def togglt_sound_combo(self):
+        """切换音色"""
+        global soundLibPath
+        soundLibPath = os.path.join(soundLibDir, self.comboSound.currentText())
+        self.switch_keys()
+
     def setInfoText(self):
+        """设置 Scale 调内音信息"""
         self.keyOriginText = [button.noteName for button in self.buttonKeys if button.isPressed]
         keyNoteOrds = [NOTE_LIST.index(noteName)-self.rootOrd+12 for noteName in self.keyOriginText]  # [12, 16, 19]
         for i in range(len(keyNoteOrds)):
@@ -244,10 +272,12 @@ class Window(QWidget, Ui_Form):
                                for ele in keyNoteOrds]
 
     def display_info(self):
+        """显示 Scale 文本"""
         self.lineKeyOrigin.setText('  '.join(self.keyOriginText))
         self.lineKeyOnScale.setText('  '.join(self.keyOnScaleText))
 
     def update_info(self):
+        """更新信息"""
         self.rootNote = self.comboRootNote.currentText()
         self.rootOrd = ORD_MAP[self.rootNote]
         self.scale = self.comboScale.currentText()
@@ -264,7 +294,7 @@ class Window(QWidget, Ui_Form):
         # print(f'[Info] Root Ord: {self.rootOrd}')
         for i in range(len(self.buttonKeys)):
             self.buttonKeys[i].update_attrs(NOTE_LIST[self.rootOrd + i])
-        self.label_info.setText('State: keys switched to current scale')
+        self.label_info.setText('State: keys switched to current soundLib / scale')
 
     def on_press(self, key):
         """按下键盘发出声音"""
@@ -274,7 +304,7 @@ class Window(QWidget, Ui_Form):
                     self.infoThread.start()
                     self.keyMap[key.char].isPressed = True
                     self.keyMap[key.char].button.setDown(True)
-                    self.start_sound(self.keyMap[key.char].sound)
+                    self.start_sound(self.keyMap[key.char])
 
     def on_release(self, key):
         """释放按键停止声音"""
@@ -283,32 +313,38 @@ class Window(QWidget, Ui_Form):
                 self.infoThread.start()
                 self.keyMap[key.char].isPressed = False
                 self.keyMap[key.char].button.setDown(False)
-                self.stop_sound(self.keyMap[key.char].sound)
+                self.stop_sound(self.keyMap[key.char])
 
     def mouse_press(self, button_key: KeyboardButton):
         """鼠标点击键盘"""
         if not button_key.isPressed:
             self.infoThread.start()
             button_key.isPressed = True
-            self.start_sound(button_key.sound)
+            self.start_sound(button_key)
 
     def mouse_release(self, button_key: KeyboardButton):
         """鼠标释放键盘"""
         self.infoThread.start()
         button_key.isPressed = False
-        self.stop_sound(button_key.sound)
+        self.stop_sound(button_key)
 
     @staticmethod
-    def start_sound(note: pygame.mixer.Sound):
-        note.set_volume(100)
-        note.play()
+    def start_sound(button_key: KeyboardButton):
+        button_key.sound.stop()
+        button_key.sound.set_volume(100)
+        button_key.sound.play()
 
     @staticmethod
-    def stop_sound(note: pygame.mixer.Sound):
-        for i in range(100, 0, -10):  # 减弱
-            pygame.time.delay(10)
-            note.set_volume(i/100)
-        note.stop()
+    def stop_sound(button_key: KeyboardButton):
+
+        def fade_and_stop(note: KeyboardButton):
+            for i in range(100, 0, -10):
+                if note.isPressed: return None
+                sleep(0.01)
+                note.sound.set_volume(i / 100)
+            note.sound.stop()
+
+        Thread(target=lambda: fade_and_stop(button_key)).start()
 
     def keyboardFocusInEvent(self, event):
         self.is_listening = True
@@ -357,16 +393,6 @@ class Window(QWidget, Ui_Form):
                            self.buttonBlackKey_12, self.buttonBlackKey_13]
         for button in buttonBlackKeys:
             button.setGeometry(button.x(), button.y(), button.width() - 1, button.height())
-
-    def msgbox(self, title: str, text: str):
-        """对话框"""
-        msgBox = QMessageBox()
-        msgBox.setWindowIcon(self.icon)  # todo: comment this line if you're not the author, or it will raise Exception
-        msgBox.setWindowTitle(title)
-        msgBox.setText(text)
-        msgBox.setIcon(QMessageBox.Icon.Information)
-        msgBox.addButton(QMessageBox.StandardButton.Ok)
-        msgBox.exec()
 
 
 # 记录错误日志
