@@ -4,38 +4,44 @@
 Program: Simple Piano
 Author: MrCrawL
 Created Time: 2024-04-23
-Last Modified: 2024-04-30
+Last Modified: 2024-05-01
 PS. 2024-04-24 by MrCrawL: Creat file and realize basic functions
     2024-04-25 by MrCrawL: Add display information function and modify sound system
     2024-04-26 by MrCrawL: Fix file not found bug and optimize code
     2024-04-28 by MrCrawL: Fix bug that mouse click doesn't display information
-    2024-04-30 by MrCrawL: Add more soundLib and improve keyboard release fluency # todo: add update function
+    2024-04-30 by MrCrawL: Add more soundLib and improve keyboard release fluency
+    2024-05-01 by MrCrawL: Add check update function and fix some bugs
 """
 
-import sys, os
-import pygame
-import logging
+import os, sys, pygame, logging, requests
 from PyQt6.QtWidgets import QApplication, QWidget, QGroupBox, QPushButton, QMessageBox
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import QThread, pyqtSignal
 from xu_ui import Ui_Form
-from mr_ico import icon_hex  # fixme: comment this line if you're not the author, or it might raise Exception
+from mr_ico import icon_hex  # fixme: comment this line please, or it might raise Exception
 from pynput.keyboard import Listener
 from threading import Thread
 from time import sleep
+from lxml.etree import HTML
+import webbrowser
 
 # 版本号
-VERSION = '1.1.0'
+VERSION = '1.2.9'
+NEW_VERSION = ''
 
 # 获取文件路径
-filePath = None
+FILE_PATH = None
 if getattr(sys, 'frozen', False):
-    filePath = os.path.join(os.path.dirname(sys.executable), os.path.basename(sys.executable))
+    FILE_PATH = os.path.join(os.path.dirname(sys.executable), os.path.basename(sys.executable))
 else:
-    filePath = os.path.abspath(__file__)
-fileDir = os.path.dirname(filePath)
-soundLibDir = os.path.join(fileDir, r'soundLib')
-soundLibPath = os.path.join(soundLibDir, os.listdir(soundLibDir)[0])
+    FILE_PATH = os.path.abspath(__file__)
+FILE_DIRNAME = os.path.dirname(FILE_PATH)
+# print(FILE_DIRNAME)
+soundLibDir = os.path.join(FILE_DIRNAME, r'soundLib')
+if os.path.exists(soundLibDir):
+    soundLibPath = os.path.join(soundLibDir, os.listdir(soundLibDir)[0])
+else:
+    soundLibPath = None
 
 # Ord 0-48, pick 32 from 49
 NOTE_LIST = ['C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3',
@@ -99,6 +105,35 @@ class InfoThread(QThread):
         self.finished.emit()
 
 
+class UpdateThread(QThread):
+    """检查更新线程"""
+    infoSignal = pyqtSignal(str)
+    updateSignal = pyqtSignal(str)
+
+    def run(self):
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+        }
+        url = 'https://github.com/MyGitRobot/SimplePiano/releases'
+
+        def check_it():
+            global NEW_VERSION
+            try:
+                res = requests.get(url, headers, timeout=5)
+            except requests.exceptions.ConnectTimeout:
+                self.infoSignal.emit('Connection time out. Please try again later.')
+                return None
+            html = HTML(res.text)
+            versions = html.xpath('//span[@class="ml-1 wb-break-all"]/text()')
+            NEW_VERSION = versions[0].strip()[1:]
+            # print(f'[Info] The newest version: {NEW_VERSION}')
+            if VERSION != NEW_VERSION:
+                if not os.path.exists(os.path.join(FILE_DIRNAME, f'SimplePiano-{"-".join(NEW_VERSION.split("."))}.exe')):
+                    self.updateSignal.emit(NEW_VERSION)
+
+        Thread(target=check_it).start()
+
+
 class KeyboardButton:
     """包含各种属性的自定义键盘按钮"""
     def __init__(self, push_button: QPushButton, note_name: str, state: bool = False):
@@ -128,7 +163,7 @@ class Window(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
 
-        # 设置窗口图标 fixme: comment the following 4 lines if you're not the author, or it might raise Exception
+        # 设置窗口图标 fixme: comment the following 4 lines please, or it might raise Exception
         self.pixmap = QPixmap()
         self.pixmap.loadFromData(bytes.fromhex(icon_hex))
         self.icon = QIcon(self.pixmap)
@@ -158,12 +193,13 @@ class Window(QWidget, Ui_Form):
         self.pressedNoteOrds = []
 
         # 音色库
-        self.comboSound.addItems(os.listdir(soundLibDir))
-        self.comboSound.currentTextChanged.connect(self.togglt_sound_combo)
+        try:
+            self.comboSound.addItems(os.listdir(soundLibDir))
+            self.comboSound.currentTextChanged.connect(self.togglt_sound_combo)
 
-        # 初始化键盘和音符
-        self.rootOrd = 12
-        try:  # 知道这里很冗长，但是不想优化了哈哈哈哈哈哈哈哈哈哈哈略略略
+            # 初始化键盘和音符
+            self.rootOrd = 12
+            # 知道这里很冗长，但是不想优化了哈哈哈哈哈哈哈哈哈哈哈略略略
             self.whiteKey_1 = KeyboardButton(self.buttonWhiteKey_1, NOTE_LIST[self.rootOrd])
             self.whiteKey_2 = KeyboardButton(self.buttonWhiteKey_2, NOTE_LIST[self.rootOrd + 2])
             self.whiteKey_3 = KeyboardButton(self.buttonWhiteKey_3, NOTE_LIST[self.rootOrd + 4])
@@ -197,7 +233,8 @@ class Window(QWidget, Ui_Form):
             self.blackKey_12 = KeyboardButton(self.buttonBlackKey_12, NOTE_LIST[self.rootOrd + 27])
             self.blackKey_13 = KeyboardButton(self.buttonBlackKey_13, NOTE_LIST[self.rootOrd + 30])
         except Exception as err:
-            self.Msgbox('Notification', 'Sound files not found.\nPlease check your soundLib files.')
+            msgBox = self.Msgbox('Notification', 'Sound files not found.\nPlease check your soundLib files.')
+            msgBox.exec()
             error_logging(err)
             sys.exit()
 
@@ -228,7 +265,7 @@ class Window(QWidget, Ui_Form):
 
         # 信息线程
         self.infoThread = InfoThread()
-        self.infoThread.info.connect(self.setInfoText)
+        self.infoThread.info.connect(self.set_info_text)
         self.infoThread.finished.connect(self.display_info)
 
         # 创建键盘监听
@@ -245,14 +282,29 @@ class Window(QWidget, Ui_Form):
         self.build_connections()
         self.buttonSwitch.clicked.connect(self.switch_keys)
 
-    def Msgbox(self, title: str, text: str):
+        # 检查更新
+        self.updateThread = UpdateThread()
+        self.updateThread.infoSignal.connect(self.pop_msgbox)
+        self.updateThread.updateSignal.connect(self.ask_update)
+        self.updateThread.start()
+
+    def Msgbox(self, title: str, text: str, button: str = 'ok' or 'yn'):
         """对话框"""
         msgBox = QMessageBox()
-        msgBox.setWindowIcon(self.icon)  # fixme: comment this line, or it might raise Exception
+        msgBox.setWindowIcon(self.icon)  # fixme: comment this line please, or it might raise Exception
         msgBox.setWindowTitle(title)
         msgBox.setText(text)
         msgBox.setIcon(QMessageBox.Icon.Information)
-        msgBox.addButton(QMessageBox.StandardButton.Ok)
+        if button == 'yn':
+            msgBox.addButton(QMessageBox.StandardButton.Yes)
+            msgBox.addButton(QMessageBox.StandardButton.No)
+        else:
+            msgBox.addButton(QMessageBox.StandardButton.Ok)
+        return msgBox
+
+    def pop_msgbox(self, text: str):
+        """弹出对话框，内容为 text"""
+        msgBox = self.Msgbox('Notification', text)
         msgBox.exec()
 
     def togglt_sound_combo(self):
@@ -261,7 +313,7 @@ class Window(QWidget, Ui_Form):
         soundLibPath = os.path.join(soundLibDir, self.comboSound.currentText())
         self.switch_keys()
 
-    def setInfoText(self):
+    def set_info_text(self):
         """设置 Scale 调内音信息"""
         self.keyOriginText = [button.noteName for button in self.buttonKeys if button.isPressed]
         keyNoteOrds = [NOTE_LIST.index(noteName)-self.rootOrd+12 for noteName in self.keyOriginText]  # [12, 16, 19]
@@ -293,7 +345,11 @@ class Window(QWidget, Ui_Form):
         """更换键盘绑定音高"""
         # print(f'[Info] Root Ord: {self.rootOrd}')
         for i in range(len(self.buttonKeys)):
-            self.buttonKeys[i].update_attrs(NOTE_LIST[self.rootOrd + i])
+            try:
+                self.buttonKeys[i].update_attrs(NOTE_LIST[self.rootOrd + i])
+            except Exception as err:
+                self.pop_msgbox(f'Error occurred: {err}')
+                return None
         self.label_info.setText('State: keys switched to current soundLib / scale')
 
     def on_press(self, key):
@@ -370,8 +426,8 @@ class Window(QWidget, Ui_Form):
 
     def load_notepad(self):
         """加载 notepad.txt"""
-        if not os.path.exists(os.path.join(fileDir, 'notepad.txt')):
-            with open(os.path.join(fileDir, 'notepad.txt'), 'w', encoding='utf-8') as f:
+        if not os.path.exists(os.path.join(FILE_DIRNAME, 'notepad.txt')):
+            with open(os.path.join(FILE_DIRNAME, 'notepad.txt'), 'w', encoding='utf-8') as f:
                 f.write('')
         with open('notepad.txt', 'r', encoding='utf-8') as f:
             self.textNotePad.setText(f.read())
@@ -394,11 +450,18 @@ class Window(QWidget, Ui_Form):
         for button in buttonBlackKeys:
             button.setGeometry(button.x(), button.y(), button.width() - 1, button.height())
 
+    def ask_update(self, version:str):
+        """询问是否更新"""
+        msgBox = self.Msgbox('Notification', f'There is a new version Simple Piano {version},\n'
+                                    f'would you like to download now?', 'yn')
+        result = msgBox.exec()
+        if result == QMessageBox.StandardButton.Yes:
+            webbrowser.open(f'https://github.com/MyGitRobot/SimplePiano/releases/tag/v{NEW_VERSION}')
 
-# 记录错误日志
+
 def error_logging(error: Exception):
     """记录错误日志"""
-    filename = os.path.join(fileDir, 'error.log')
+    filename = os.path.join(FILE_DIRNAME, 'error.log')
     logging.basicConfig(filename=filename, format='%(asctime)s - %(levelname)s - %(message)s', level=logging.ERROR,
                         encoding='utf-8')
     logging.error(f"Error o rccurred: {error}", exc_info=True)
@@ -407,9 +470,7 @@ def error_logging(error: Exception):
 if __name__ == '__main__':
     try:
         # 初始化 pygame，使用 pygame 发出声音
-        pygame.init()
         pygame.mixer.init()
-
         # 初始化 Qt 窗口
         app = QApplication(sys.argv)
         ui = Window()
